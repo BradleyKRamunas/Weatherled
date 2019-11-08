@@ -14,7 +14,9 @@ class SerialWriter:
         time.sleep(2)
 
     def write(self, bitmap):
+        collapsed_bitmap = []
         for row in range(len(bitmap)):
             for col in range(len(bitmap[0])):
-                self.arduino.write(str.encode(bitmap[row][col]))
-                time.sleep(1)
+                collapsed_bitmap.append(bitmap[row][col])
+        self.arduino.write(str.encode(''.join(collapsed_bitmap)))
+        time.sleep(1)
