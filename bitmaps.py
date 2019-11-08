@@ -1,3 +1,4 @@
+from weather_condition import WeatherCondition
 
 blank = [
     [0,0,0,0,0,0,0,0],
@@ -8,6 +9,17 @@ blank = [
     [0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0],
+]
+
+unknown = [
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,1,1,0,0,0],
+    [0,0,1,0,0,1,0,0],
+    [0,0,0,0,0,1,0,0],
+    [0,0,0,0,1,0,0,0],
+    [0,0,0,0,1,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0],
 ]
 
 sunny = [
@@ -67,13 +79,35 @@ showers = [
 
 thunderstorm = [
     [0,0,1,1,1,1,0,0],
-    [0,1,1,1,1,1,0,0],
     [0,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1],
     [0,0,0,1,1,0,0,0],
     [0,0,1,1,0,0,0,0],
     [0,0,0,1,1,0,0,0],
     [0,0,0,0,1,1,0,0],
     [0,0,0,0,0,1,0,0],
+]
+
+zero_l = [
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,1,1,0,0,0,0,0],
+    [1,0,0,1,0,0,0,0],
+    [1,0,0,1,0,0,0,0],
+    [1,0,0,1,0,0,0,0],
+    [0,1,1,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+]
+
+zero_r = [
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,1,1,0],
+    [0,0,0,0,1,0,0,1],
+    [0,0,0,0,1,0,0,1],
+    [0,0,0,0,1,0,0,1],
+    [0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,0],
 ]
 
 one_l = [
@@ -273,3 +307,63 @@ nine_r = [
     [0,0,0,0,0,0,1,1],
     [0,0,0,0,0,0,0,0],
 ]
+
+first_digit_map = {
+    0 : zero_l,
+    1 : one_l,
+    2 : two_l,
+    3 : three_l, 
+    4 : four_l,
+    5 : five_l,
+    6 : six_l,
+    7 : seven_l,
+    8 : eight_l,
+    9 : nine_l
+}
+
+second_digit_map = {
+    0 : zero_r,
+    1 : one_r,
+    2 : two_r,
+    3 : three_r, 
+    4 : four_r,
+    5 : five_r,
+    6 : six_r,
+    7 : seven_r,
+    8 : eight_r,
+    9 : nine_r
+}
+
+def convert_bitmap_to_int(bitmap):
+    out = 0
+    for row in range(len(bitmap)):
+        for col in range(len(bitmap[0])):
+            out = (out << 1) | bitmap[row][col]
+    return out
+
+def convert_condition_to_int(condition):
+    if condition == WeatherCondition.UNKNOWN:
+        return convert_bitmap_to_int(unknown)
+    if condition == WeatherCondition.RAINY:
+        return convert_bitmap_to_int(rain)
+    if condition == WeatherCondition.SUNNY:
+        return convert_bitmap_to_int(sunny)
+    if condition == WeatherCondition.CLEAR:
+        return convert_bitmap_to_int(clear)
+    if condition == WeatherCondition.THUNDERSTORMS:
+        return convert_bitmap_to_int(thunderstorm)
+    if condition == WeatherCondition.CLOUDY:
+        return convert_bitmap_to_int(cloudy)
+    if condition == WeatherCondition.SHOWERS:
+        return convert_bitmap_to_int(showers)
+
+def convert_temperature_to_int(temperature):
+    first_digit = temperature // 10
+    second_digit = temperature % 10
+    resulting_bitmap = blank
+    first_digit_bitmap = first_digit_map[first_digit]
+    second_digit_bitmap = second_digit_map[second_digit]
+    for row in range(len(blank)):
+        for col in range(len(blank[0])):
+            resulting_bitmap[row][col] = first_digit_bitmap[row][col] + second_digit_bitmap[row][col]
+    return convert_bitmap_to_int(resulting_bitmap)
