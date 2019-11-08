@@ -1,23 +1,20 @@
 import serial
 import time
 
+'''
 MAC_COM_PORT = '/dev/cu.usbserial-DJ00S7LN'
 WINDOWS_COM_PORT = 'COM4'
 BAUD_RATE = 115200
+'''
+class SerialWriter:
+    def __init__(self, com_port, baud_rate=115200):
+        self.com_port = com_port
+        self.baud_rate = baud_rate
+        self.arduino = serial.Serial(self.com_port, self.baud_rate)
+        time.sleep(2)
 
-arduino = serial.Serial(MAC_COM_PORT, BAUD_RATE)
-time.sleep(2)
-
-while True:
-
-    # TODO: Get weather condition here (API call)
-
-    # TODO: Convert to bitmap of choice
-
-    # Writing example
-    if (var == '1'):
-        arduino.write(str.encode('1'))
-        time.sleep(1)
-
-    if (var == '0'):
-        arduino.write(str.encode('0'))
+    def write(self, bitmap):
+        for row in range(len(bitmap)):
+            for col in range(len(bitmap[0])):
+                self.arduino.write(str.encode(bitmap[row][col]))
+                time.sleep(1)

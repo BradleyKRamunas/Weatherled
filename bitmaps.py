@@ -333,31 +333,23 @@ second_digit_map = {
     8 : eight_r,
     9 : nine_r
 }
-
-def convert_bitmap_to_int(bitmap):
-    out = 0
-    for row in range(len(bitmap)):
-        for col in range(len(bitmap[0])):
-            out = (out << 1) | bitmap[row][col]
-    return out
-
-def convert_condition_to_int(condition):
+def convert_condition_to_bitmap(condition):
     if condition == WeatherCondition.UNKNOWN:
-        return convert_bitmap_to_int(unknown)
+        return unknown
     if condition == WeatherCondition.RAINY:
-        return convert_bitmap_to_int(rain)
+        return rain
     if condition == WeatherCondition.SUNNY:
-        return convert_bitmap_to_int(sunny)
+        return sunny
     if condition == WeatherCondition.CLEAR:
-        return convert_bitmap_to_int(clear)
+        return clear
     if condition == WeatherCondition.THUNDERSTORMS:
-        return convert_bitmap_to_int(thunderstorm)
+        return thunderstorm
     if condition == WeatherCondition.CLOUDY:
-        return convert_bitmap_to_int(cloudy)
+        return cloudy
     if condition == WeatherCondition.SHOWERS:
-        return convert_bitmap_to_int(showers)
+        return showers
 
-def convert_temperature_to_int(temperature):
+def convert_temperature_to_bitmap(temperature):
     first_digit = temperature // 10
     second_digit = temperature % 10
     resulting_bitmap = blank
@@ -366,4 +358,4 @@ def convert_temperature_to_int(temperature):
     for row in range(len(blank)):
         for col in range(len(blank[0])):
             resulting_bitmap[row][col] = first_digit_bitmap[row][col] + second_digit_bitmap[row][col]
-    return convert_bitmap_to_int(resulting_bitmap)
+    return resulting_bitmap
