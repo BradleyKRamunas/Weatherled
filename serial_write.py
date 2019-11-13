@@ -3,7 +3,7 @@ import time
 
 '''
 MAC_COM_PORT = '/dev/cu.usbserial-DJ00S7LN'
-WINDOWS_COM_PORT = 'COM4'
+WINDOWS_COM_PORT = '/dev/ttyS4'
 BAUD_RATE = 115200
 '''
 class SerialWriter:
@@ -18,5 +18,5 @@ class SerialWriter:
         for row in range(len(bitmap)):
             for col in range(len(bitmap[0])):
                 collapsed_bitmap.append(str(bitmap[row][col]))
-        self.arduino.write(str.encode(''.join(collapsed_bitmap)))
+        self.arduino.write(str.encode('<'+''.join(collapsed_bitmap)+'>'))
         time.sleep(1)
